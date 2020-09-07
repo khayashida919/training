@@ -18,13 +18,7 @@ class SetScreen extends StatelessWidget {
             return ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
-              return _Card(
-                title: snapshot.data[index].title,
-                trainingTime: snapshot.data[index].trainingTime,
-                intervalTime: snapshot.data[index].intervalTime,
-                repeatTime: snapshot.data[index].repeatTime,
-                isEnable: snapshot.data[index].isEnable,
-              );
+              return _Card(snapshot.data[index]);
             });
           }
           return Container();
@@ -54,13 +48,9 @@ class _Content extends StatelessWidget {
 }
 
 class _Card extends StatelessWidget {
-  _Card({Key key, this.title, this.trainingTime, this.intervalTime, this.repeatTime, this.isEnable}) : super(key: key);
+  _Card(this.trainingSetModel);
 
-  final String title;
-  final int trainingTime;
-  final int intervalTime;
-  final int repeatTime;
-  final int isEnable;
+  final TrainingSetModel trainingSetModel;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +59,7 @@ class _Card extends StatelessWidget {
       child: Card(
         child: InkWell(
           onTap: () async {
-            DbProvider.db.updateSetModels(title);
+            DbProvider.db.updateSetModels(trainingSetModel);
             context.read<PageIndex>().changeIndex(0);
             pageController.animateToPage(0,
                 duration: Duration(milliseconds: 300), curve: Curves.easeIn);
@@ -85,7 +75,7 @@ class _Card extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    Text(title,
+                    Text(trainingSetModel.title,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -102,15 +92,15 @@ class _Card extends StatelessWidget {
                     Column(
                       children: <Widget>[
                         _Content(
-                            Content(TimeType.training, Icons.whatshot, Colors.red, trainingTime.toString())
+                            Content(TimeType.training, Icons.whatshot, Colors.red, trainingSetModel.trainingTime.toString())
                         ),
                         SizedBox(height: 8),
-                        _Content(Content(TimeType.interval, Icons.free_breakfast, Colors.orangeAccent, intervalTime.toString())),
+                        _Content(Content(TimeType.interval, Icons.free_breakfast, Colors.orangeAccent, trainingSetModel.intervalTime.toString())),
                         SizedBox(height: 8),
-                        _Content(Content(TimeType.repeat, Icons.repeat, Colors.grey, repeatTime.toString())),
+                        _Content(Content(TimeType.repeat, Icons.repeat, Colors.grey, trainingSetModel.repeatTime.toString())),
                       ],
                     ),
-                    if(isEnable == 1) Icon(Icons.check, size: 50, color: Colors.blueAccent,)
+                    if(trainingSetModel.isEnable == 1) Icon(Icons.check, size: 50, color: Colors.blueAccent,)
                   ],
                 ),
               )

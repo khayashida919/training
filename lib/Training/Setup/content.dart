@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:planktraining/Common/text.dart';
+import 'package:provider/provider.dart';
 import '../../Database.dart';
 import 'setup.dart';
 import 'setupProvider.dart';
@@ -20,20 +21,20 @@ class InputTime extends StatelessWidget {
   final Content content;
   final TrainingSetModel model;
 
-//  void setValue(SetupProvider model, int value) {
-//    switch (content) {
-//      case TimeType.training:
-//        return model.changeTraining(value);
-//        break;
-//      case TimeType.interval:
-//        model.changeIntervalTime(value);
-//        break;
-//      case TimeType.repeat:
-//        model.changeRepeatTime(value);
-//        break;
-//    }
-//  }
-//
+  void setValue(SetupProvider setupProvider, int value) {
+    switch (content.type) {
+      case TimeType.training:
+        return setupProvider.changeTraining(value);
+        break;
+      case TimeType.interval:
+        setupProvider.changeIntervalTime(value);
+        break;
+      case TimeType.repeat:
+        setupProvider.changeRepeatTime(value);
+        break;
+    }
+  }
+
   int getValue() {
     switch (content.type) {
       case TimeType.training:
@@ -60,29 +61,29 @@ class InputTime extends StatelessWidget {
           ],
         ),
         SizedBox(height: 16),
-//        SizedBox(
-//          height: 64,
-//          width: double.infinity,
-//          child: OutlineButton(
-//            child: Row(
-//              mainAxisAlignment: MainAxisAlignment.center,
-//              crossAxisAlignment: CrossAxisAlignment.center,
-//              children: <Widget>[
-//                BoldText(getValue().toString(), 40),
-//                SizedBox(width: 4),
-//                BoldText(content.type == TimeType.repeat ? "回" : "秒", 24),
-//              ],
-//            ),
-//            color: Color.fromRGBO(244, 143, 177, 1),
-//            onPressed: () => showMaterialNumberPicker(
-//                context: context,
-//                title: "",
-//                maxNumber: 100,
-//                minNumber: 0,
-//                selectedNumber: getValue(trainingScreenModel),
-//                onChanged: (value) => setValue(trainingScreenModel, value)),
-//          ),
-//        )
+        SizedBox(
+          height: 64,
+          width: double.infinity,
+          child: OutlineButton(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                BoldText(getValue().toString(), 40),
+                SizedBox(width: 4),
+                BoldText(content.type == TimeType.repeat ? "回" : "秒", 24),
+              ],
+            ),
+            color: Color.fromRGBO(244, 143, 177, 1),
+            onPressed: () => showMaterialNumberPicker(
+                context: context,
+                title: "",
+                maxNumber: 100,
+                minNumber: 0,
+                selectedNumber: getValue(),
+                onChanged: (value) => setValue(context.read<SetupProvider>(), value)),
+          ),
+        )
       ],
     );
   }

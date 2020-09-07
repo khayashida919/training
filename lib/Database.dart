@@ -131,6 +131,9 @@ class DbProvider {
   Future<List<TrainingSetModel>> getTrainingSetModels() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('$trainingSetTableName');
+//    if(maps.isEmpty) {
+//      return null;
+//    }
     List<TrainingSetModel> temp =  List.generate(maps.length, (i) {
       return TrainingSetModel(
         maps[i]['title'],
@@ -141,26 +144,39 @@ class DbProvider {
         maps[i]['hanyou1'], maps[i]['hanyou2'], maps[i]['hanyou3'],
       );
     });
+    print(temp);
     return temp;
   }
-  
-  void updateSetModels(String title) async {
-    final List<TrainingSetModel> models = await getTrainingSetModels();
-    final List<TrainingSetModel> offModels = models.map((e) {
-      e.isEnable = e.title == title ? 1 : 0;
-      return e;
-    }).toList();
 
+  /*
+  *   渡したモデルを有効フラグオンに、それ以外はオフにしてDBに保存
+  * */
+  void updateSetModels(TrainingSetModel trainingSetModel) async {
+    final List<TrainingSetModel> models = await getTrainingSetModels();
     final db = await database;
-    offModels.forEach((element) {
-      db.update('$trainingSetTableName',
-          element.toMap(),
-          where: "title = ?",
-          whereArgs: [element.title],
+
+    if(models.contains(trainingSetModel.title)) {   //同じ名前のトレーニングセットが既に登録されている場合
+      final List<TrainingSetModel> offModels = models.map((e) {
+        e.isEnable = e.title == trainingSetModel.title ? 1 : 0;
+        return e;
+      }).toList();
+
+      offModels.forEach((element) {
+        db.update('$trainingSetTableName',
+            element.toMap(),
+            where: "title = ?",
+            whereArgs: [element.title],
+            conflictAlgorithm: ConflictAlgorithm.replace);
+      });
+    } else {  //トレーニングセットが一つも登録されてなかった場合
+      //TODO: フラグがONのモデルが複数存在してしまう
+      await db.insert(
+          DbProvider.db.trainingSetTableName,
+          trainingSetModel.toMap(),
           conflictAlgorithm: ConflictAlgorithm.replace);
-    });
+    }
   }
-  
+
 }
 
 

@@ -4,10 +4,10 @@ import 'package:planktraining/Database.dart';
 
 class SetupProvider with ChangeNotifier {
 
-  String title = "";
-  int trainingTime = 1;
-  int intervalTime = 1;
-  int repeatTime = 1;
+  String title = "腹筋";
+  int trainingTime = 30;
+  int intervalTime = 5;
+  int repeatTime = 3;
 
   void changeTraining(int value) {
     trainingTime = value;
@@ -24,13 +24,23 @@ class SetupProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<TrainingSetModel> selectedTrainingSet() async {
+  void selectedTrainingSet() async {
     List<TrainingSetModel> trainingSets = await DbProvider.db.getTrainingSetModels();
-    if (trainingSets.isEmpty) {
-      return null;
-    }
+    if (trainingSets.isEmpty) return;
     TrainingSetModel trainingSet = trainingSets.firstWhere((element) => element.isEnable == 1);
-    return trainingSet;
+    trainingTime = trainingSet.trainingTime;
+    repeatTime = trainingSet.repeatTime;
+    intervalTime = trainingSet.intervalTime;
+    notifyListeners();
+  }
+
+  /*
+  *   トレーニング設定画面でSaveButtonをタップされた時に呼び出される
+  * */
+  void saveTrainingSet() {
+    DbProvider.db.updateSetModels(TrainingSetModel(
+      title, trainingTime, intervalTime, repeatTime, 1, "", "", "",
+    ));
   }
 
 }

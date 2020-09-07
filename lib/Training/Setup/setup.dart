@@ -23,30 +23,37 @@ class SetupScreen extends StatelessWidget {
         children: <Widget>[
           Container(
             padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-            child: Consumer<SetupProvider>(
-              builder: (context, setupProvider, child) {
-                return FutureBuilder(
-                  future: setupProvider.selectedTrainingSet(),
-                  builder: (context, AsyncSnapshot<TrainingSetModel> snapshot) {
-                    if (snapshot.data == null) {
-                      return _Body(TrainingSetModel(
-                        setupProvider.title,
-                        setupProvider.trainingTime,
-                        setupProvider.intervalTime,
-                        setupProvider.repeatTime,
-                        1, "", "", "",
-                      ));
-                    } else {
-                      return _Body(snapshot.data);
-                    }
-                  },
-                );
-              },
-            ),
+            child: _Setup()
           ),
         ],
       ),
     );
+  }
+}
+
+class _Setup extends StatefulWidget {
+  @override
+  _SetupState createState() => _SetupState();
+}
+
+class _SetupState extends State<_Setup> {
+
+  @override
+  void initState() {
+    context.read<SetupProvider>().selectedTrainingSet();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    SetupProvider setupProvider = context.watch<SetupProvider>();
+    return _Body(TrainingSetModel(
+      setupProvider.title,
+      setupProvider.trainingTime,
+      setupProvider.intervalTime,
+      setupProvider.repeatTime,
+      1, "", "", "",
+    ));
   }
 }
 
@@ -134,7 +141,7 @@ class _InputTitle extends StatelessWidget {
         labelText: 'トレーニング名',
       ),
       onChanged: (text) {
-//        context.read<SetupProvider>().title = text;
+        context.read<SetupProvider>().title = text;
       },
     );
   }
@@ -151,22 +158,9 @@ class _saveButton extends StatelessWidget {
               "保存",
               style: TextStyle(color: Colors.blueAccent),
             ),
-            onPressed: () async {
+            onPressed: () {
               final setupProvider = context.read<SetupProvider>();
-              final database = await DbProvider.db.database;
-              await database.insert(
-                  DbProvider.db.trainingSetTableName,
-                  TrainingSetModel(
-                    setupProvider.title,
-                    setupProvider.trainingTime,
-                    setupProvider.intervalTime,
-                    setupProvider.repeatTime,
-                    1,
-                    "",
-                    "",
-                    "",
-                  ).toMap(),
-                  conflictAlgorithm: ConflictAlgorithm.replace);
+              setupProvider.saveTrainingSet();
               Scaffold.of(context).showSnackBar(SnackBar(
                 content: Text("セットを保存しました"),
               ));
