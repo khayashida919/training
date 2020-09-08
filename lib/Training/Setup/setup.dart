@@ -4,7 +4,6 @@ import 'package:planktraining/Database.dart';
 import 'package:planktraining/Training/Training/training.dart';
 import 'package:planktraining/Training/Setup/setupProvider.dart';
 import 'package:provider/provider.dart';
-import 'package:sqflite/sqflite.dart';
 
 import 'content.dart';
 
@@ -126,6 +125,7 @@ class _InputTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //TODO: タイトルを設定
     return TextField(
       enabled: true,
       maxLengthEnforced: false,

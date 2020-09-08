@@ -28,6 +28,7 @@ class SetupProvider with ChangeNotifier {
     List<TrainingSetModel> trainingSets = await DbProvider.db.getTrainingSetModels();
     if (trainingSets.isEmpty) return;
     TrainingSetModel trainingSet = trainingSets.firstWhere((element) => element.isEnable == 1);
+    title = trainingSet.title;
     trainingTime = trainingSet.trainingTime;
     repeatTime = trainingSet.repeatTime;
     intervalTime = trainingSet.intervalTime;

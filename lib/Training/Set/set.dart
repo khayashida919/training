@@ -15,6 +15,10 @@ class SetScreen extends StatelessWidget {
       future: DbProvider.db.getTrainingSetModels(),
         builder: (context, AsyncSnapshot<List<TrainingSetModel>> snapshot) {
           if (snapshot.hasData) {
+            //DBから取得した値を文字列で並び替える
+            snapshot.data.sort((lhs, rhs) {
+              return lhs.title.compareTo(rhs.title);
+            });
             return ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {

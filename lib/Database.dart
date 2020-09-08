@@ -30,10 +30,10 @@ class TrainingModel {
 }
 
 class TrainingSetModel {
-  final String title;
-  final int trainingTime;
-  final int intervalTime;
-  final int repeatTime;
+  String title;
+  int trainingTime;
+  int intervalTime;
+  int repeatTime;
   int isEnable;
   final String hanyou1;
   final String hanyou2;
@@ -155,7 +155,32 @@ class DbProvider {
     final List<TrainingSetModel> models = await getTrainingSetModels();
     final db = await database;
 
-    if(models.contains(trainingSetModel.title)) {   //同じ名前のトレーニングセットが既に登録されている場合
+    TrainingSetModel sameTitle = models.firstWhere((element) {
+      return element.title == trainingSetModel.title;
+    });
+
+    if(sameTitle != null) {   //同じ名前のトレーニングセットが既に登録されている場合
+      final List<TrainingSetModel> offModels = models.map((e) {
+        if(e.title == trainingSetModel.title) {
+          e.title = trainingSetModel.title;
+          e.trainingTime = trainingSetModel.trainingTime;
+          e.intervalTime = trainingSetModel.intervalTime;
+          e.repeatTime = trainingSetModel.repeatTime;
+          e.isEnable = 1;
+        } else {
+          e.isEnable = 0;
+        }
+        return e;
+      }).toList();
+
+      offModels.forEach((element) {
+        db.update('$trainingSetTableName',
+            element.toMap(),
+            where: "title = ?",
+            whereArgs: [element.title],
+            conflictAlgorithm: ConflictAlgorithm.replace);
+      });
+    } else {  //トレーニングセットが一つも登録されてなかった場合
       final List<TrainingSetModel> offModels = models.map((e) {
         e.isEnable = e.title == trainingSetModel.title ? 1 : 0;
         return e;
@@ -168,9 +193,8 @@ class DbProvider {
             whereArgs: [element.title],
             conflictAlgorithm: ConflictAlgorithm.replace);
       });
-    } else {  //トレーニングセットが一つも登録されてなかった場合
-      //TODO: フラグがONのモデルが複数存在してしまう
-      await db.insert(
+
+       db.insert(
           DbProvider.db.trainingSetTableName,
           trainingSetModel.toMap(),
           conflictAlgorithm: ConflictAlgorithm.replace);
