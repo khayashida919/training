@@ -13,26 +13,27 @@ class SetScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: DbProvider.db.getTrainingSetModels(),
-        builder: (context, AsyncSnapshot<List<TrainingSetModel>> snapshot) {
-          if (snapshot.hasData) {
-            //DBから取得した値を文字列で並び替える
-            snapshot.data.sort((lhs, rhs) {
-              return lhs.title.compareTo(rhs.title);
-            });
-            return ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, index) {
-              return _Card(snapshot.data[index]);
-            });
-          }
-          return Container();
-        },
+      builder: (context, AsyncSnapshot<List<TrainingSetModel>> snapshot) {
+        if (snapshot.hasData) {
+          //DBから取得した値を文字列で並び替える
+          snapshot.data.sort((lhs, rhs) {
+            return lhs.title.compareTo(rhs.title);
+          });
+          return ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index) {
+                return _Card(snapshot.data[index]);
+              });
+        }
+        return Container();
+      },
     );
   }
 }
 
 class _Content extends StatelessWidget {
   _Content(this.content);
+
   Content content;
 
   @override
@@ -41,11 +42,13 @@ class _Content extends StatelessWidget {
       children: <Widget>[
         Icon(content.icon, color: content.color),
         SizedBox(width: 40),
-        Text(content.title,
+        Text(
+          content.title,
           style: TextStyle(
             fontSize: 24,
             color: Colors.black54,
-          ),)
+          ),
+        )
       ],
     );
   }
@@ -82,7 +85,7 @@ class _Card extends StatelessWidget {
                     Text(trainingSetModel.title,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20,
+                          fontSize: 25,
                         )),
                   ],
                 ),
@@ -95,16 +98,31 @@ class _Card extends StatelessWidget {
                   children: <Widget>[
                     Column(
                       children: <Widget>[
-                        _Content(
-                            Content(TimeType.training, Icons.whatshot, Colors.red, trainingSetModel.trainingTime.toString())
-                        ),
+                        _Content(Content(
+                            TimeType.training,
+                            Icons.whatshot,
+                            Colors.red,
+                            trainingSetModel.trainingTime.toString())),
                         SizedBox(height: 8),
-                        _Content(Content(TimeType.interval, Icons.free_breakfast, Colors.orangeAccent, trainingSetModel.intervalTime.toString())),
+                        _Content(Content(
+                            TimeType.interval,
+                            Icons.free_breakfast,
+                            Colors.orangeAccent,
+                            trainingSetModel.intervalTime.toString())),
                         SizedBox(height: 8),
-                        _Content(Content(TimeType.repeat, Icons.repeat, Colors.grey, trainingSetModel.repeatTime.toString())),
+                        _Content(Content(
+                            TimeType.repeat,
+                            Icons.repeat,
+                            Colors.grey,
+                            trainingSetModel.repeatTime.toString())),
                       ],
                     ),
-                    if(trainingSetModel.isEnable == 1) Icon(Icons.check, size: 50, color: Colors.blueAccent,)
+                    if (trainingSetModel.isEnable == 1)
+                      Icon(
+                        Icons.check,
+                        size: 50,
+                        color: Colors.blueAccent,
+                      )
                   ],
                 ),
               )
@@ -115,5 +133,3 @@ class _Card extends StatelessWidget {
     );
   }
 }
-
-

@@ -37,6 +37,8 @@ class _Setup extends StatefulWidget {
 
 class _SetupState extends State<_Setup> {
 
+  bool isInitial = true;
+
   @override
   void initState() {
     context.read<SetupProvider>().selectedTrainingSet();
@@ -46,13 +48,18 @@ class _SetupState extends State<_Setup> {
   @override
   Widget build(BuildContext context) {
     SetupProvider setupProvider = context.watch<SetupProvider>();
-    return _Body(TrainingSetModel(
-      setupProvider.title,
-      setupProvider.trainingTime,
-      setupProvider.intervalTime,
-      setupProvider.repeatTime,
-      1, "", "", "",
-    ));
+    if (isInitial) {
+      isInitial = false;
+      return Container();
+    } else {
+      return _Body(TrainingSetModel(
+        setupProvider.title,
+        setupProvider.trainingTime,
+        setupProvider.intervalTime,
+        setupProvider.repeatTime,
+        1, "", "", "",
+      ));
+    }
   }
 }
 
@@ -119,14 +126,14 @@ class _Body extends StatelessWidget {
 }
 
 class _InputTitle extends StatelessWidget {
-  _InputTitle(String title);
+  _InputTitle(this.title);
 
   String title;
 
   @override
   Widget build(BuildContext context) {
-    //TODO: タイトルを設定
-    return TextField(
+    return TextFormField(
+      initialValue: title,
       enabled: true,
       maxLengthEnforced: false,
       style: TextStyle(

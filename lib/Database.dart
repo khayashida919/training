@@ -58,11 +58,14 @@ class TrainingSetModel {
 
 class DbProvider {
   DbProvider._();
+
   static final DbProvider db = DbProvider._();
   Database _instance;
 
   String get databaseName => "database.db";
+
   String get tableName => "training";
+
   String get trainingSetTableName => "trainingSet";
 
   Future<Database> get database async {
@@ -123,25 +126,30 @@ class DbProvider {
         maps[i]['trainingTime'],
         maps[i]['intervalTime'],
         maps[i]['repeatTime'],
-        maps[i]['hanyou1'], maps[i]['hanyou2'], maps[i]['hanyou3'],
+        maps[i]['hanyou1'],
+        maps[i]['hanyou2'],
+        maps[i]['hanyou3'],
       );
     });
   }
 
   Future<List<TrainingSetModel>> getTrainingSetModels() async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('$trainingSetTableName');
-//    if(maps.isEmpty) {
-//      return null;
-//    }
-    List<TrainingSetModel> temp =  List.generate(maps.length, (i) {
+    final List<Map<String, dynamic>> maps = await db.query(
+        '$trainingSetTableName');
+    if (maps.isEmpty) {
+      return [];
+    }
+    List<TrainingSetModel> temp = List.generate(maps.length, (i) {
       return TrainingSetModel(
         maps[i]['title'],
         maps[i]['trainingTime'],
         maps[i]['intervalTime'],
         maps[i]['repeatTime'],
         maps[i]['isEnable'],
-        maps[i]['hanyou1'], maps[i]['hanyou2'], maps[i]['hanyou3'],
+        maps[i]['hanyou1'],
+        maps[i]['hanyou2'],
+        maps[i]['hanyou3'],
       );
     });
     print(temp);
@@ -149,19 +157,25 @@ class DbProvider {
   }
 
   /*
-  *   渡したモデルを有効フラグオンに、それ以外はオフにしてDBに保存
+  *   渡したモデルを選択有効フラグオンに、それ以外はオフにしてDBに保存
   * */
   void updateSetModels(TrainingSetModel trainingSetModel) async {
     final List<TrainingSetModel> models = await getTrainingSetModels();
     final db = await database;
 
-    TrainingSetModel sameTitle = models.firstWhere((element) {
-      return element.title == trainingSetModel.title;
-    });
+    TrainingSetModel sameTitle;
 
-    if(sameTitle != null) {   //同じ名前のトレーニングセットが既に登録されている場合
+    if (models.isEmpty) {
+      sameTitle = null;
+    } else {
+      sameTitle = models.firstWhere((element) =>
+        element.title == trainingSetModel.title
+      , orElse: () => null);
+    }
+
+    if (sameTitle != null) { //同じ名前のトレーニングセットが既に登録されている場合
       final List<TrainingSetModel> offModels = models.map((e) {
-        if(e.title == trainingSetModel.title) {
+        if (e.title == trainingSetModel.title) {
           e.title = trainingSetModel.title;
           e.trainingTime = trainingSetModel.trainingTime;
           e.intervalTime = trainingSetModel.intervalTime;
@@ -180,7 +194,7 @@ class DbProvider {
             whereArgs: [element.title],
             conflictAlgorithm: ConflictAlgorithm.replace);
       });
-    } else {  //トレーニングセットが一つも登録されてなかった場合
+    } else { //トレーニングセットが一つも登録されてなかった場合
       final List<TrainingSetModel> offModels = models.map((e) {
         e.isEnable = e.title == trainingSetModel.title ? 1 : 0;
         return e;
@@ -194,7 +208,7 @@ class DbProvider {
             conflictAlgorithm: ConflictAlgorithm.replace);
       });
 
-       db.insert(
+      db.insert(
           DbProvider.db.trainingSetTableName,
           trainingSetModel.toMap(),
           conflictAlgorithm: ConflictAlgorithm.replace);
