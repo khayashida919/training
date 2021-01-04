@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:planktraining/Common/text.dart';
 import 'package:planktraining/Database.dart';
-import 'package:planktraining/Training/Training/training.dart';
 import 'package:planktraining/Training/Setup/setupProvider.dart';
+import 'package:planktraining/Training/Training/training.dart';
 import 'package:provider/provider.dart';
 
 import 'content.dart';
@@ -21,9 +21,7 @@ class SetupScreen extends StatelessWidget {
       child: ListView(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-            child: _Setup()
-          ),
+              padding: EdgeInsets.fromLTRB(16, 0, 16, 0), child: _Setup()),
         ],
       ),
     );
@@ -36,9 +34,6 @@ class _Setup extends StatefulWidget {
 }
 
 class _SetupState extends State<_Setup> {
-
-  bool isInitial = true;
-
   @override
   void initState() {
     context.read<SetupProvider>().selectedTrainingSet();
@@ -48,18 +43,16 @@ class _SetupState extends State<_Setup> {
   @override
   Widget build(BuildContext context) {
     SetupProvider setupProvider = context.watch<SetupProvider>();
-    if (isInitial) {
-      isInitial = false;
-      return Container();
-    } else {
-      return _Body(TrainingSetModel(
-        setupProvider.title,
-        setupProvider.trainingTime,
-        setupProvider.intervalTime,
-        setupProvider.repeatTime,
-        1, "", "", "",
-      ));
-    }
+    return _Body(TrainingSetModel(
+      setupProvider.title,
+      setupProvider.trainingTime,
+      setupProvider.intervalTime,
+      setupProvider.repeatTime,
+      1,
+      "",
+      "",
+      "",
+    ));
   }
 }
 
@@ -128,12 +121,12 @@ class _Body extends StatelessWidget {
 class _InputTitle extends StatelessWidget {
   _InputTitle(this.title);
 
-  String title;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      initialValue: title,
+    return TextField(
+      controller: TextEditingController(text: title),
       enabled: true,
       maxLengthEnforced: false,
       style: TextStyle(

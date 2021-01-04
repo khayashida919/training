@@ -1,9 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:planktraining/Database.dart';
 
 class SetupProvider with ChangeNotifier {
-
   String title = "腹筋";
   int trainingTime = 30;
   int intervalTime = 5;
@@ -25,9 +23,11 @@ class SetupProvider with ChangeNotifier {
   }
 
   void selectedTrainingSet() async {
-    List<TrainingSetModel> trainingSets = await DbProvider.db.getTrainingSetModels();
+    List<TrainingSetModel> trainingSets =
+        await DbProvider.db.getTrainingSetModels();
     if (trainingSets.isEmpty) return;
-    TrainingSetModel trainingSet = trainingSets.firstWhere((element) => element.isEnable == 1);
+    TrainingSetModel trainingSet =
+        trainingSets.firstWhere((element) => element.isEnable == 1);
     title = trainingSet.title;
     trainingTime = trainingSet.trainingTime;
     repeatTime = trainingSet.repeatTime;
@@ -40,8 +40,14 @@ class SetupProvider with ChangeNotifier {
   * */
   void saveTrainingSet() {
     DbProvider.db.updateSetModels(TrainingSetModel(
-      title, trainingTime, intervalTime, repeatTime, 1, "", "", "",
+      title,
+      trainingTime,
+      intervalTime,
+      repeatTime,
+      1,
+      "",
+      "",
+      "",
     ));
   }
-
 }
