@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+
 import 'painter.dart';
 
 /// Create a Circular Countdown Timer
@@ -35,15 +36,15 @@ class CircularCountDownTimer extends StatefulWidget {
 
   CircularCountDownTimer(
       {@required this.width,
-        @required this.height,
-        @required this.duration,
-        @required this.fillColor,
-        @required this.color,
-        this.isReverse,
-        this.on3secondsAgo,
-        this.onComplete,
-        this.strokeWidth,
-        this.textStyle})
+      @required this.height,
+      @required this.duration,
+      @required this.fillColor,
+      @required this.color,
+      this.isReverse,
+      this.on3secondsAgo,
+      this.onComplete,
+      this.strokeWidth,
+      this.textStyle})
       : assert(width != null),
         assert(height != null),
         assert(duration != null),
@@ -59,6 +60,7 @@ class _CircularCountDownTimerState extends State<CircularCountDownTimer>
   AnimationController controller;
 
   bool flag = true;
+  bool on3AgoFlag = true;
 
   String get timerString {
     Duration duration = controller.duration * controller.value;
@@ -67,14 +69,14 @@ class _CircularCountDownTimerState extends State<CircularCountDownTimer>
     Duration forwardDuration = Duration(seconds: widget.duration);
     if (widget.isReverse == null || !widget.isReverse) {
       // For Forward Order
-//      if (forwardDuration.inSeconds == duration.inSeconds+3 && flag) {
-//        flag = false;
-//        if (widget.on3secondsAgo != null) {
-//          SchedulerBinding.instance
-//              .addPostFrameCallback((_) => widget.on3secondsAgo());
-//        }
-//        return time;
-//      }
+      print([duration.inSeconds, forwardDuration.inSeconds - 3, on3AgoFlag]);
+      if (duration.inSeconds == forwardDuration.inSeconds - 3 && on3AgoFlag) {
+        on3AgoFlag = false;
+        if (widget.on3secondsAgo != null) {
+          SchedulerBinding.instance
+              .addPostFrameCallback((_) => widget.on3secondsAgo());
+        }
+      }
       if (forwardDuration.inSeconds == duration.inSeconds && flag) {
         flag = false;
         if (widget.onComplete != null) {
@@ -86,15 +88,13 @@ class _CircularCountDownTimerState extends State<CircularCountDownTimer>
       return time;
     } else {
       // For Reverse Order
-//      print(duration.inSeconds);
-//      if (forwardDuration.inSeconds == duration.inSeconds && flag) {
-//        flag = false;
-//        if (widget.onComplete != null) {
-//          SchedulerBinding.instance
-//              .addPostFrameCallback((_) => widget.onComplete());
-//        }
-//        return time;
-//      }
+      if (duration.inSeconds == 3 && on3AgoFlag) {
+        on3AgoFlag = false;
+        if (widget.on3secondsAgo != null) {
+          SchedulerBinding.instance
+              .addPostFrameCallback((_) => widget.on3secondsAgo());
+        }
+      }
       if (controller.isDismissed && flag) {
         flag = false;
         if (widget.onComplete != null) {
@@ -121,6 +121,7 @@ class _CircularCountDownTimerState extends State<CircularCountDownTimer>
 
   void setAnimation() {
     flag = true;
+    on3AgoFlag = true;
     controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: widget.duration),

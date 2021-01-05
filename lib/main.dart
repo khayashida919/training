@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'Training/Calendar/calendar.dart';
 import 'Training/Set/set.dart';
 import 'Training/Setting/setting.dart';
 import 'Training/Setup/setup.dart';
 
-void main() { runApp(PlankTraining()); }
+void main() {
+  runApp(PlankTraining());
+}
 
 class PageIndex with ChangeNotifier {
   int value = 0;
@@ -20,14 +23,12 @@ class PlankTraining extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'PlankTraining',
-        theme: ThemeData(
-          primarySwatch: Colors.red,
-        ),
-        home: ChangeNotifierProvider(
-          create: (_) => PageIndex(),
-          child: _RootScreen()
-        ),
+      title: 'PlankTraining',
+      theme: ThemeData(
+        primarySwatch: Colors.red,
+      ),
+      home: ChangeNotifierProvider(
+          create: (_) => PageIndex(), child: _RootScreen()),
     );
   }
 }
@@ -35,7 +36,6 @@ class PlankTraining extends StatelessWidget {
 PageController pageController = PageController(initialPage: 0);
 
 class _RootScreen extends StatelessWidget {
-
   final _pageWidgets = [
     SetupScreen(),
     CalendarScreen(),
@@ -58,8 +58,10 @@ class _RootScreen extends StatelessWidget {
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(icon: Icon(Icons.directions_run), label: "トレーニング"),
-            BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: "カレンダー"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.directions_run), label: "トレーニング"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.calendar_today), label: "カレンダー"),
             BottomNavigationBarItem(icon: Icon(Icons.list), label: "セット"),
             BottomNavigationBarItem(icon: Icon(Icons.settings), label: "設定"),
           ],
@@ -71,7 +73,6 @@ class _RootScreen extends StatelessWidget {
                 duration: Duration(milliseconds: 300), curve: Curves.easeIn);
           },
           type: BottomNavigationBarType.fixed,
-        )
-    );
+        ));
   }
 }

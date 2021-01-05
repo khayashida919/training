@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:planktraining/Common/text.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../Database.dart';
@@ -8,7 +9,8 @@ class CalendarScreen extends StatefulWidget {
   _CalendarScreenState createState() => _CalendarScreenState();
 }
 
-class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStateMixin {
+class _CalendarScreenState extends State<CalendarScreen>
+    with TickerProviderStateMixin {
   Map<DateTime, List> _events = Map();
   List _selectedEvents;
   bool _isSelected = false;
@@ -33,16 +35,6 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
     _animationController.dispose();
     _calendarController.dispose();
     super.dispose();
-  }
-
-  Future<Map<DateTime, List>> getEvents() async {
-    _events = {
-      DateTime.now().subtract(Duration(days: 1)): [
-        'Event A0',
-        'Event B0',
-        'Event C0'
-      ]
-    };
   }
 
   void _onDaySelected(DateTime day, List events) {
@@ -81,7 +73,8 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
             });
             //一度も日付が選択されていない場合
             if (!_isSelected) {
-              final _selectedDay = DateTime.parse(DateTime.now().toString().split(" ").first);
+              final _selectedDay =
+                  DateTime.parse(DateTime.now().toString().split(" ").first);
               _selectedEvents = _events[_selectedDay] ?? [];
             }
             return Column(
@@ -130,13 +123,36 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
       children: _selectedEvents
           .map((event) => Container(
                 decoration: BoxDecoration(
-                  border: Border.all(width: 0.8),
+                  border: Border.all(width: 0.8, color: Colors.grey[700]),
                   borderRadius: BorderRadius.circular(12.0),
                 ),
                 margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                 child: ListTile(
-                  title: Text((event as TrainingModel).title),
-                  onTap: () => print('$event tapped!'),
+                  leading: BoldText((event as TrainingModel).title, 18),
+                  title: Row(
+                    children: [
+                      SizedBox(width: 16),
+                      Icon(Icons.whatshot, color: Colors.red, size: 20),
+                      Text(
+                        (event as TrainingModel).trainingTime.toString(),
+                        style: TextStyle(color: Colors.black54, fontSize: 18),
+                      ),
+                      SizedBox(width: 16),
+                      Icon(Icons.free_breakfast,
+                          color: Colors.orangeAccent, size: 20),
+                      Text(
+                        (event as TrainingModel).intervalTime.toString(),
+                        style: TextStyle(color: Colors.black54, fontSize: 18),
+                      ),
+                      SizedBox(width: 16),
+                      Icon(Icons.repeat, color: Colors.grey, size: 20),
+                      Text(
+                        (event as TrainingModel).repeatTime.toString(),
+                        style: TextStyle(color: Colors.black54, fontSize: 18),
+                      ),
+                    ],
+                  ),
+                  onTap: null,
                 ),
               ))
           .toList(),
