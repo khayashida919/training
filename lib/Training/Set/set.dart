@@ -39,7 +39,10 @@ class _Content extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
+        SizedBox(width: 8),
         Icon(content.icon, color: content.color),
         SizedBox(width: 40),
         Text(
@@ -65,7 +68,7 @@ class _Card extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       child: Card(
         child: InkWell(
-          onTap: () async {
+          onTap: () {
             DbProvider.db.updateSetModels(trainingSetModel);
             context.read<PageIndex>().changeIndex(0);
             pageController.animateToPage(0,
@@ -97,6 +100,7 @@ class _Card extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         _Content(Content(
                             TimeType.training,
