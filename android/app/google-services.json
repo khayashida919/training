@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "278408519083",
+    "project_id": "trainingtimer-33e9a",
+    "storage_bucket": "trainingtimer-33e9a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:278408519083:android:ef7e61c42426e62c9946ee",
+        "android_client_info": {
+          "package_name": "khayashida.TrainingTimer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "278408519083-6sucv66irke2cd7v0favgpjj0k8bpbkm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOIyuoIhmyvTePlaVSSNsLAK-CJuc2Xbw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "278408519083-6sucv66irke2cd7v0favgpjj0k8bpbkm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "278408519083-ba1kdg1f4kcruo9utmurqllh1dl7sdaj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "khayashida.TrainingTimer"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

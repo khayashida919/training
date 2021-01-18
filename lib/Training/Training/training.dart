@@ -1,13 +1,17 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:planktraining/CircularTimer/circularTimer.dart';
 import 'package:planktraining/Training/Training/trainingProvider.dart';
+import 'package:planktraining/admob/ad_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:soundpool/soundpool.dart';
+
 import '../../Database.dart';
 
 class TrainingScreen extends StatelessWidget {
-  TrainingScreen(this._title, this._trainingTime, this._intervalTime, this._repeatTime);
+  TrainingScreen(
+      this._title, this._trainingTime, this._intervalTime, this._repeatTime);
   String _title;
   int _trainingTime;
   int _intervalTime;
@@ -31,6 +35,13 @@ class TrainingScreenBody extends StatelessWidget {
         ),
         body: ListView(
           children: <Widget>[
+            AdmobBanner(
+              adUnitId: AdMobService().getBannerAdUnitId(),
+              adSize: AdmobBannerSize(
+                width: MediaQuery.of(context).size.width.toInt(),
+                height: AdMobService().getHeight(context).toInt(),
+              ),
+            ),
             Container(
               padding: EdgeInsets.all(16),
               child: Column(
@@ -65,23 +76,33 @@ class TrainingScreenBody extends StatelessWidget {
                               color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                         onPressed: () async {
-                          final trainingModel = context.read<TrainingProvider>();
+                          final trainingModel =
+                              context.read<TrainingProvider>();
                           final database = await DbProvider.db.database;
-                          database.insert(DbProvider.db.tableName,
+                          database.insert(
+                              DbProvider.db.tableName,
                               TrainingModel(
                                 trainingModel.title,
                                 DateTime.now().toString(),
                                 trainingModel.trainingTime,
                                 trainingModel.intervalTime,
                                 trainingModel.repeatTime,
-                                "", "", "",
-                              ).toMap()
-                          );
+                                "",
+                                "",
+                                "",
+                              ).toMap());
                           Navigator.of(context).pop(true);
                         },
                       ),
                     ),
                 ],
+              ),
+            ),
+            AdmobBanner(
+              adUnitId: AdMobService().getBannerAdUnitId(),
+              adSize: AdmobBannerSize(
+                width: MediaQuery.of(context).size.width.toInt(),
+                height: AdMobService().getHeight(context).toInt(),
               ),
             ),
           ],
@@ -125,19 +146,18 @@ class Timer extends StatelessWidget {
         fillColor: color(phase),
         strokeWidth: 50.0,
         textStyle: TextStyle(
-            fontSize: 20.0,
-            color: Colors.black54,
-            fontWeight: FontWeight.bold),
+            fontSize: 20.0, color: Colors.black54, fontWeight: FontWeight.bold),
         isReverse: phase == TrainingPhase.countDown,
         /* 遅延実行させないとBuild中に変更がかかり状態が更新されない */
         on3secondsAgo: () async {
-          int soundId = await rootBundle.load("sound/countdown.mp3").then((ByteData soundData) {
+          int soundId = await rootBundle
+              .load("sound/countdown.mp3")
+              .then((ByteData soundData) {
             return _pool.load(soundData);
           });
           await _pool.play(soundId);
         },
-        onComplete: () =>
-            Future.delayed(Duration(milliseconds: 10)).then(
-                (_) => context.read<TrainingProvider>().changeNextPhase()));
+        onComplete: () => Future.delayed(Duration(milliseconds: 10))
+            .then((_) => context.read<TrainingProvider>().changeNextPhase()));
   }
 }

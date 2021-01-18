@@ -1,3 +1,4 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,7 +7,11 @@ import 'Training/Set/set.dart';
 import 'Training/Setting/setting.dart';
 import 'Training/Setup/setup.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Admob.initialize();
+  await Admob.requestTrackingAuthorization();
+
   runApp(PlankTraining());
 }
 

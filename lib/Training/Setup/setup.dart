@@ -1,8 +1,10 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:planktraining/Common/text.dart';
 import 'package:planktraining/Database.dart';
 import 'package:planktraining/Training/Setup/setupProvider.dart';
 import 'package:planktraining/Training/Training/training.dart';
+import 'package:planktraining/admob/ad_manager.dart';
 import 'package:provider/provider.dart';
 
 import 'content.dart';
@@ -65,6 +67,13 @@ class _Body extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
+        AdmobBanner(
+          adUnitId: AdMobService().getBannerAdUnitId(),
+          adSize: AdmobBannerSize(
+            width: MediaQuery.of(context).size.width.toInt(),
+            height: AdMobService().getHeight(context).toInt(),
+          ),
+        ),
         SizedBox(height: 20),
         BoldText("さあ、トレーニングを始めましょう", 32),
         SizedBox(height: 20),
@@ -113,6 +122,13 @@ class _Body extends StatelessWidget {
           ),
         ),
         SizedBox(height: 20),
+        AdmobBanner(
+          adUnitId: AdMobService().getBannerAdUnitId(),
+          adSize: AdmobBannerSize(
+            width: MediaQuery.of(context).size.width.toInt(),
+            height: AdMobService().getHeight(context).toInt(),
+          ),
+        ),
       ],
     );
   }

@@ -1,8 +1,10 @@
 import 'dart:ui';
 
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:planktraining/Training/Setup/content.dart';
 import 'package:planktraining/Training/Setup/setup.dart';
+import 'package:planktraining/admob/ad_manager.dart';
 import 'package:provider/provider.dart';
 
 import '../../Database.dart';
@@ -19,11 +21,24 @@ class SetScreen extends StatelessWidget {
           snapshot.data.sort((lhs, rhs) {
             return lhs.title.compareTo(rhs.title);
           });
-          return ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, index) {
-                return _Card(snapshot.data[index]);
-              });
+          return Column(
+            children: [
+              AdmobBanner(
+                adUnitId: AdMobService().getBannerAdUnitId(),
+                adSize: AdmobBannerSize(
+                  width: MediaQuery.of(context).size.width.toInt(),
+                  height: AdMobService().getHeight(context).toInt(),
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, index) {
+                      return _Card(snapshot.data[index]);
+                    }),
+              ),
+            ],
+          );
         }
         return Container();
       },

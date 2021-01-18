@@ -1,5 +1,7 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:planktraining/Common/text.dart';
+import 'package:planktraining/admob/ad_manager.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../Database.dart';
@@ -37,7 +39,7 @@ class _CalendarScreenState extends State<CalendarScreen>
     super.dispose();
   }
 
-  void _onDaySelected(DateTime day, List events) {
+  void _onDaySelected(DateTime day, List events, List holidays) {
     print('CALLBACK: _onDaySelected  day $day events $events');
     _isSelected = true;
     setState(() {
@@ -80,6 +82,13 @@ class _CalendarScreenState extends State<CalendarScreen>
             return Column(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
+                AdmobBanner(
+                  adUnitId: AdMobService().getBannerAdUnitId(),
+                  adSize: AdmobBannerSize(
+                    width: MediaQuery.of(context).size.width.toInt(),
+                    height: AdMobService().getHeight(context).toInt(),
+                  ),
+                ),
                 _buildTableCalendar(),
                 Expanded(child: _buildEventList()),
               ],

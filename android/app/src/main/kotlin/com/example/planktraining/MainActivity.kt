@@ -1,4 +1,4 @@
-package com.example.planktraining
+package khayashida.TrainingTimer
 
 import io.flutter.embedding.android.FlutterActivity
 
