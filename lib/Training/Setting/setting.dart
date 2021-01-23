@@ -14,11 +14,11 @@ class SettingScreen extends StatelessWidget {
             AdmobBanner(
               adUnitId: AdMobService().getBannerAdUnitId(),
               adSize: AdmobBannerSize(
-                width: AdmobBannerSize.BANNER.height,
-                height: AdmobBannerSize.BANNER.width,
+                width: MediaQuery.of(context).size.width.toInt(),
+                height: AdMobService().getHeight(context).toInt(),
               ),
             ),
-            SizedBox(height: 50),
+            SizedBox(height: 5),
             FutureBuilder(
                 future: DbProvider.db.getTrainingModels(),
                 builder:

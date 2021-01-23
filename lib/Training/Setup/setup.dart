@@ -22,8 +22,22 @@ class SetupScreen extends StatelessWidget {
       create: (_) => SetupProvider(),
       child: ListView(
         children: <Widget>[
+          AdmobBanner(
+            adUnitId: AdMobService().getBannerAdUnitId(),
+            adSize: AdmobBannerSize(
+              width: MediaQuery.of(context).size.width.toInt(),
+              height: AdMobService().getHeight(context).toInt(),
+            ),
+          ),
           Container(
               padding: EdgeInsets.fromLTRB(16, 0, 16, 0), child: _Setup()),
+          AdmobBanner(
+            adUnitId: AdMobService().getBannerAdUnitId(),
+            adSize: AdmobBannerSize(
+              width: MediaQuery.of(context).size.width.toInt(),
+              height: AdMobService().getHeight(context).toInt(),
+            ),
+          ),
         ],
       ),
     );
@@ -67,13 +81,6 @@ class _Body extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        AdmobBanner(
-          adUnitId: AdMobService().getBannerAdUnitId(),
-          adSize: AdmobBannerSize(
-            width: MediaQuery.of(context).size.width.toInt(),
-            height: AdMobService().getHeight(context).toInt(),
-          ),
-        ),
         SizedBox(height: 20),
         BoldText("さあ、トレーニングを始めましょう", 32),
         SizedBox(height: 20),
