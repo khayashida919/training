@@ -1,9 +1,15 @@
 import 'dart:io';
 
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 
 class AdMobService {
   String getBannerAdUnitId() {
+    var isDebug = true;
+    if (isDebug) {
+      return AdmobBanner.testAdUnitId;
+    }
+
     // iOSとAndroidで広告ユニットIDを分岐させる
     if (Platform.isAndroid) {
       // Androidの広告ユニットID

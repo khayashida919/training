@@ -36,10 +36,16 @@ dependencies:
   path: ^1.7.0
   intl: ^0.16.1
   admob_flutter: ^1.0.1
+  flutter_launcher_icons: ^0.8.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  image_path: "icon/icon.png"
+  android: true
+  ios: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

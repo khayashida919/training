@@ -129,13 +129,6 @@ class _Body extends StatelessWidget {
           ),
         ),
         SizedBox(height: 20),
-        AdmobBanner(
-          adUnitId: AdMobService().getBannerAdUnitId(),
-          adSize: AdmobBannerSize(
-            width: MediaQuery.of(context).size.width.toInt(),
-            height: AdMobService().getHeight(context).toInt(),
-          ),
-        ),
       ],
     );
   }

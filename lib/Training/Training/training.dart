@@ -98,6 +98,7 @@ class TrainingScreenBody extends StatelessWidget {
                 ],
               ),
             ),
+            SizedBox(height: 16),
             AdmobBanner(
               adUnitId: AdMobService().getBannerAdUnitId(),
               adSize: AdmobBannerSize(
