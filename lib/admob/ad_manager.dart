@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class AdMobService {
   String getBannerAdUnitId() {
-    var isDebug = true;
+    var isDebug = false;
     if (isDebug) {
       return AdmobBanner.testAdUnitId;
     }
